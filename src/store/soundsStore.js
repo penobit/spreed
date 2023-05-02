@@ -63,7 +63,7 @@ const mutations = {
 
 	/**
 	 * Sets the join audio object
-	 * 
+	 *
 	 * @param {object} state current store state
 	 * @param {HTMLAudioElement} audioObject new audio object
 	 */
@@ -73,7 +73,7 @@ const mutations = {
 
 	/**
 	 * Sets the leave audio object
-	 * 
+	 *
 	 * @param {object} state current store state
 	 * @param {HTMLAudioElement} audioObject new audio object
 	 */
@@ -83,7 +83,7 @@ const mutations = {
 
 	/**
 	 * Sets the wait audio object
-	 * 
+	 *
 	 * @param {object} state current store state
 	 * @param {HTMLAudioElement} audioObject new audio object
 	 */
@@ -93,7 +93,7 @@ const mutations = {
 
 	/**
 	 * Sets a flag that all audio objects were created
-	 * 
+	 *
 	 * @param {object} state current store state
 	 */
 	setAudioObjectsCreated(state) {
@@ -104,15 +104,15 @@ const mutations = {
 /**
  * Helper method to get the full file path of an audio file in spreed/img.
  * Example: getFullAudioFilepath('myAudio') => spreed/img/myAudio.ogg
- * 
+ *
  * @param {string} fileName The name of the file without extension
- * @returns The full path to the file in the spreed/img directory and adds .ogg/.flac depending on supported codecs
+ * @return {string} The full path to the file in the spreed/img directory and adds .ogg/.flac depending on supported codecs
  */
 const getFullAudioFilepath = function(fileName) {
 	const tempAudio = new Audio()
 
 	// Prefer the .ogg version of sounds, but fall back to .flac in case .ogg is not supported (Safari)
-	if (tempAudio.canPlayType("audio/ogg")) {
+	if (tempAudio.canPlayType('audio/ogg')) {
 		return generateFilePath('spreed', 'img', fileName + '.ogg')
 	} else {
 		return generateFilePath('spreed', 'img', fileName + '.flac')
@@ -121,9 +121,9 @@ const getFullAudioFilepath = function(fileName) {
 
 /**
  * Creates a HTMLAudioElement with the specified filePath and loads it
- * 
+ *
  * @param {string} filePath Path to the file
- * @returns The created and loaded HTMLAudioElement
+ * @return {HTMLAudioElement} The created and loaded HTMLAudioElement
  */
 const createAudioObject = function(filePath) {
 	const audio = new Audio(filePath)
@@ -156,14 +156,14 @@ const actions = {
 
 	/**
 	 * Plays the join audio file with a volume of 0.75
-	 * 
+	 *
 	 * @param {object} context default store context
 	 */
 	playJoinAudio(context) {
 		// Make sure the audio objects are really created before playing it
 		context.dispatch('createAudioObjects')
-		
-		let audio = context.state.joinAudioObject
+
+		const audio = context.state.joinAudioObject
 		audio.load()
 		audio.volume = 0.75
 		audio.play()
@@ -171,14 +171,14 @@ const actions = {
 
 	/**
 	 * Plays the leave audio file with a volume of 0.75
-	 * 
+	 *
 	 * @param {object} context default store context
 	 */
 	playLeaveAudio(context) {
 		// Make sure the audio objects are really created before playing it
 		context.dispatch('createAudioObjects')
 
-		let audio = context.state.leaveAudioObject
+		const audio = context.state.leaveAudioObject
 		audio.load()
 		audio.volume = 0.75
 		audio.play()
@@ -186,14 +186,14 @@ const actions = {
 
 	/**
 	 * Plays the wait audio file with a volume of 0.5
-	 * 
+	 *
 	 * @param {object} context default store context
 	 */
 	playWaitAudio(context) {
 		// Make sure the audio objects are really created before playing it
 		context.dispatch('createAudioObjects')
 
-		let audio = context.state.waitAudioObject
+		const audio = context.state.waitAudioObject
 		audio.load()
 		audio.volume = 0.5
 		audio.play()
@@ -201,17 +201,17 @@ const actions = {
 
 	/**
 	 * Pauses the wait audio playback
-	 * 
+	 *
 	 * @param {object} context default store context
 	 */
 	pauseWaitAudio(context) {
-		let audio = context.state.waitAudioObject
+		const audio = context.state.waitAudioObject
 		audio.pause()
 	},
 
 	/**
 	 * If not already created, this creates audio objects for join, leave and wait sounds
-	 * 
+	 *
 	 * @param {object} context default store context
 	 */
 	createAudioObjects(context) {
@@ -220,18 +220,18 @@ const actions = {
 			return
 		}
 
-		let joinFilepath = getFullAudioFilepath('join_call')
-		let joinAudio = createAudioObject(joinFilepath)
+		const joinFilepath = getFullAudioFilepath('join_call')
+		const joinAudio = createAudioObject(joinFilepath)
 		context.commit('setJoinAudioObject', joinAudio)
 
-		let leaveFilepath = getFullAudioFilepath('leave_call')
-		let leaveAudio = createAudioObject(leaveFilepath)
+		const leaveFilepath = getFullAudioFilepath('leave_call')
+		const leaveAudio = createAudioObject(leaveFilepath)
 		context.commit('setLeaveAudioObject', leaveAudio)
 
-		let waitFilepath = getFullAudioFilepath('LibremPhoneCall')
-		let waitAudio = createAudioObject(waitFilepath)
+		const waitFilepath = getFullAudioFilepath('LibremPhoneCall')
+		const waitAudio = createAudioObject(waitFilepath)
 		context.commit('setWaitAudioObject', waitAudio)
-	}
+	},
 }
 
 export default { state, mutations, getters, actions }
