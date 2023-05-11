@@ -54,6 +54,9 @@ class Version18000Date20230504205823 extends SimpleMigrationStep {
 			$table->addColumn('url', Types::STRING, [
 				'length' => 4000,
 			]);
+			$table->addColumn('url_hash', Types::STRING, [
+				'length' => 64,
+			]);
 			$table->addColumn('description', Types::STRING, [
 				'length' => 4000,
 			]);

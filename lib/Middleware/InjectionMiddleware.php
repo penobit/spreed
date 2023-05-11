@@ -94,6 +94,7 @@ class InjectionMiddleware extends Middleware {
 		if (!$controller instanceof AEnvironmentAwareController) {
 			return;
 		}
+		\OC::$server->getLogger()->error('beforeController');
 
 		$reflectionMethod = new \ReflectionMethod($controller, $methodName);
 

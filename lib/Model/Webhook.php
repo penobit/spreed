@@ -30,6 +30,8 @@ use OCP\AppFramework\Db\Entity;
  * @method string getName()
  * @method void setUrl(string $url)
  * @method string getUrl()
+ * @method void setUrlHash(string $urlHash)
+ * @method string getUrlHash()
  * @method void setDescription(string $description)
  * @method string getDescription()
  * @method void setSecret(string $secret)
@@ -40,6 +42,7 @@ use OCP\AppFramework\Db\Entity;
 class Webhook extends Entity implements \JsonSerializable {
 	protected string $name = '';
 	protected string $url = '';
+	protected string $urlHash = '';
 	protected string $description = '';
 	protected string $secret = '';
 	protected string $token = '';
@@ -47,6 +50,7 @@ class Webhook extends Entity implements \JsonSerializable {
 	public function __construct() {
 		$this->addType('name', 'string');
 		$this->addType('url', 'string');
+		$this->addType('url_hash', 'string');
 		$this->addType('description', 'string');
 		$this->addType('secret', 'string');
 		$this->addType('token', 'string');
@@ -57,6 +61,7 @@ class Webhook extends Entity implements \JsonSerializable {
 			'id' => $this->getId(),
 			'name' => $this->getName(),
 			'url' => $this->getUrl(),
+			'url_hash' => $this->getUrlHash(),
 			'description' => $this->getDescription(),
 			'secret' => $this->getSecret(),
 			'token' => $this->getToken(),

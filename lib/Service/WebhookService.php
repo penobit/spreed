@@ -171,4 +171,8 @@ class WebhookService {
 			'name' => $user->getDisplayName(),
 		];
 	}
+
+	public function getWebhooksForToken(string $token): array {
+		return $this->webhookMapper->findForToken($token);
+	}
 }

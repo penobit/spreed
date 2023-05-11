@@ -45,4 +45,5 @@ return array_merge_recursive(
 	include(__DIR__ . '/routes/routesSettingsController.php'),
 	include(__DIR__ . '/routes/routesSignalingController.php'),
 	include(__DIR__ . '/routes/routesTempAvatarController.php'),
+	include(__DIR__ . '/routes/routesWebhookController.php'),
 );

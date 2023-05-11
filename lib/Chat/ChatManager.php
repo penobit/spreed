@@ -246,7 +246,7 @@ class ChatManager {
 	 * Sends a new message to the given chat.
 	 *
 	 * @param Room $chat
-	 * @param Participant $participant
+	 * @param ?Participant $participant
 	 * @param string $actorType
 	 * @param string $actorId
 	 * @param string $message
@@ -255,7 +255,7 @@ class ChatManager {
 	 * @param string $referenceId
 	 * @return IComment
 	 */
-	public function sendMessage(Room $chat, Participant $participant, string $actorType, string $actorId, string $message, \DateTime $creationDateTime, ?IComment $replyTo, string $referenceId, bool $silent): IComment {
+	public function sendMessage(Room $chat, ?Participant $participant, string $actorType, string $actorId, string $message, \DateTime $creationDateTime, ?IComment $replyTo, string $referenceId, bool $silent): IComment {
 		$comment = $this->commentsManager->create($actorType, $actorId, 'chat', (string) $chat->getId());
 		$comment->setMessage($message, self::MAX_CHAT_LENGTH);
 		$comment->setCreationDateTime($creationDateTime);
@@ -273,7 +273,11 @@ class ChatManager {
 		}
 		$this->setMessageExpiration($chat, $comment);
 
-		$event = new ChatParticipantEvent($chat, $comment, $participant, $silent);
+		if ($participant instanceof Participant) {
+			$event = new ChatParticipantEvent($chat, $comment, $participant, $silent);
+		} else {
+			$event = new ChatEvent($chat, $comment, false, $silent);
+		}
 		$this->dispatcher->dispatch(self::EVENT_BEFORE_MESSAGE_SEND, $event);
 
 		$shouldFlush = $this->notificationManager->defer();
@@ -281,7 +285,7 @@ class ChatManager {
 			$this->commentsManager->save($comment);
 
 			// Update last_message
-			if ($comment->getActorType() !== 'bots' || $comment->getActorId() === 'changelog') {
+			if ($comment->getActorType() !== 'bots' || $comment->getActorId() === 'changelog' || str_starts_with($comment->getActorId(), 'webhook-')) {
 				$this->roomService->setLastMessage($chat, $comment);
 				$this->unreadCountCache->clear($chat->getId() . '-');
 			} else {
